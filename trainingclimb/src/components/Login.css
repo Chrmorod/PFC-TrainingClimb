@@ -1,0 +1,113 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Nunito", sans-serif;
+  }
+  
+  button {
+    border: none;
+    outline: none;
+    border-radius: 0.5em;
+    width: 100%;
+    padding: 15px 0;
+    color: #fff;
+    font-size: 16px;
+    letter-spacing: 1px;
+    background: #191a19;
+    cursor: pointer;
+  }
+  .login {
+    width: 100%;
+    min-height: 100vh;
+    padding: 0 20px;
+    background: url("../images/trianglesbg.svg");
+    display: flex;
+  }
+  
+  .login .containerlogin {
+    padding: 60px;
+    margin: auto;
+    width: 100%;
+    max-width: 520px;
+    min-height: 600px;
+    border-radius: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgb(194, 194, 194);
+    box-shadow: 0 50px 70px -20px rgba(0, 0, 0, 0.8);
+  }
+  
+  .login .containerlogin label {
+    color: black;
+    margin: 14px 0;
+    display: block;
+    font-size: 22px;
+    line-height: 1;
+  }
+  
+  .login .containerlogin input {
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: 0.5em;
+    font-size: 19px;
+    padding: 10px;
+    background: rgb(248, 248, 248, 50%);
+    color: rgb(0, 0, 0);
+    letter-spacing: 1px;
+  }
+  
+  .login .containerlogin .btncontainer {
+    width: 100%;
+    padding: 24px 0;
+  }
+  
+  .login .containerlogin .btncontainer p {
+    margin: 14px 0 0 0;
+    text-align: right;
+    color: #fff;
+  }
+  
+  .login .containerlogin .btncontainer p span {
+    color: rgb(0, 59, 252);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: all 400ms ease-in-out;
+  }
+  
+  .login .containerlogin.btncontainer p span:hover {
+    color: red;
+  }
+  
+  .login .containerlogin .errorMessage {
+    color: red;
+    font-size: 16px;
+  }
+  .logo{
+    width: 50px;
+    height: 50px;
+    background: url("../images/climberlogo.svg");
+    border-radius: 50%;
+    margin: 0.5em;
+    background-color: white;
+  }
+  .logofather{
+      display:flex;
+      align-items: center;
+      margin: 0 auto;
+  }
+  .profile{
+    width: 50px;
+    height: 50px;
+    background: url("../images/profileDefault.svg");
+    border-radius: 50%;
+  }
+  .btnprofile{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
