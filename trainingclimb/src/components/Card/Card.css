@@ -1,11 +1,12 @@
 .card-container{
     margin:1em;
     width:400px;
-    height: 700px;
     overflow:hidden;
     box-shadow: 0px 0px 15px -5px;
     transition:0.3s;
     animation: ease-in;
+    border-radius: 16px;
+    background-color: white;
 }
 .card-container:hover{
     transform: scale(1,1);
@@ -16,7 +17,17 @@
     width: 100%;
     height: auto;
   }
+.image-profile {
+    width: 25px;
+    height: 25px;
+}
+.image-logoapp{
+    width: 25px;
+    height: 25px;
+    float: right;
+}
 .card-content{
     margin: 1em;
     margin-top: 0.5em;
+    font-size: 15px;
 }

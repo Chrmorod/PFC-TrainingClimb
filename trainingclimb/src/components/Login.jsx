@@ -35,7 +35,6 @@ export function Login(props) {
           storageRef.put(file);
         }
     };
-    console.log("es imagen:"+image);
   return (
     <Fragment>
     <section className="login">

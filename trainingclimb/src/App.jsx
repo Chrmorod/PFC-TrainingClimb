@@ -1,7 +1,7 @@
 import React, {useState, useEffect, Fragment } from "react";
 import firebs from './services/firebs';
 import { Login } from "./components/Login";
-import { Home } from "./components/Home";
+import { Home } from "./components/Home/Home";
 import "./App.css"
 import {Route, NavLink, Switch, BrowserRouter} from 'react-router-dom';
 export function App(){
