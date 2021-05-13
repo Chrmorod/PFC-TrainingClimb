@@ -9,10 +9,14 @@ export function App(){
    const [user, setUser] = useState('');
    //Login UserName
    const[username, setUserName] = useState('');
+   //Login userUID
+   const[userUID,setUserUID] = useState('');
    //Login Email User
    const [email,setEmail] = useState('');
    //Login Password User
    const [password, setPassword] = useState('');
+   // Login Image User Profile
+   const [image, setImage] = useState("");
    //Errors on Login
    const [emailError,setEmailError] = useState('');
    const [passwordError,setPasswordError] = useState('');
@@ -34,6 +38,15 @@ export function App(){
        firebs
            .auth()
            .signInWithEmailAndPassword(email,password)
+           .then((userCredential) => {
+               const userUID =userCredential.user.uid;
+               setUserUID(userUID);
+               firebs.database().ref().child('Users').child(userUID).get().then((snapshot) => {
+                   const username = snapshot.val().username;
+                   setUserName(username);
+                   
+               })
+           })
            .catch(err => {
                switch(err.code){
                    case "auth/invalid-email":
@@ -46,7 +59,7 @@ export function App(){
                        break;
                }
            })
-   }
+        }
    const handleSignUp = () =>{
        clearErrors();
        firebs
@@ -71,7 +84,8 @@ export function App(){
                     const userUID = userdata.uid;
                     firebs.database().ref('Users/'+userUID+"/").set({
                         email: email,  
-                        username: username
+                        username: username,
+                        image: image
                     });
                 }
             })
@@ -102,9 +116,15 @@ export function App(){
     <BrowserRouter>
         <div className="logincontainerfather">
           {user ? (
-            <Home handleLogout={handleLogout}/>
+            <Home 
+            handleLogout={handleLogout}
+            username={username}
+            userUID={userUID}
+            image={image}/>
           ):(
             <Login 
+            image ={image}
+            setImage={setImage}
             username={username}
             setUserName ={setUserName}
             email={email}

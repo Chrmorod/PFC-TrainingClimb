@@ -1,3 +1,12 @@
+.msgWelcome{
+  color: #5fe46c;
+  font-size: 15px;
+  display: flex;
+  list-style: none;
+  text-align: center;
+  margin-right: 2rem;
+  margin-top: 1rem;
+}
 .navbar {
   background-color: #666666;
   height: 80px;
@@ -67,7 +76,7 @@
 }
 
 .nav-item .active {
-  color: #5fe46c;;
+  color: #5fe46c;
   /*border: 1px solid #09490fb2;*/
 }
 
@@ -117,10 +126,28 @@
     color: #fff;
   }
 }
+.btnLogout{
+  background: #666666;
+  color: #5fe46c;
+  margin-top: 0.25rem;
+  font-size: 20px;
 
-.bntlogout{
-  background-color: transparent;
-
+}
+.btnLogout:hover{
+  color: red;
+}
+.header-home{
+  background-color:#666666;
+  display:flex;
+  justify-content: left;
+  padding: 1rem;
+}
+.profileHome{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-left:1em;
+  margin-right: 0.5em;
 }
 /*.pictureuser{
   width: 35px;

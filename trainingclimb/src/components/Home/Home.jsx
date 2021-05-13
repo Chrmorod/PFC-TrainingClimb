@@ -4,10 +4,14 @@ import {NavLink, Switch, Route} from 'react-router-dom';
 import { AiOutlineLogout } from "react-icons/ai";
 import { NewLeadBould } from "../NewLeadBoulder/NewLeadBould";
 import { MyLeadBould } from '../MyLeadBoulder/MyLeadBould';
+import { Profile } from "../Profile/Profile";
 
 export function Home(props) {
     const {
-        handleLogout
+        handleLogout,
+        username,
+        userUID,
+        image
     } = props;
     const [click, setClick] = useState(false);
     const handleClick = () => setClick(!click);
@@ -22,16 +26,44 @@ export function Home(props) {
         }
     }
     class MyLeadBouldView extends React.Component{
+        constructor(props) {
+            super(props);
+            this.state = {
+              username:username,
+              userUID:userUID
+            }
+        }
+        componentDidMount(){
+          console.log("Este es el user "+this.state.username)
+          this.setState({username:this.state.username})
+          this.setState({userUID:this.state.userUID})
+          console.log("Este es el user2 "+username+"este es su UID "+ userUID)
+        }
         render(){
           return (
             <div>
-              <MyLeadBould></MyLeadBould>
+              <MyLeadBould 
+              username={username}
+              userUID={userUID}/>
+            </div>
+          )
+        }
+    }
+    class ProfileView extends React.Component{
+        render(){
+          return (
+            <div>
+              <Profile></Profile>
             </div>
           )
         }
     }
     return(
         <>
+            <div className="header-home">
+                <img className ="profileHome" src={image}/>
+                <p className="msgWelcome">Welcome {username}!</p>
+            </div>
             <nav className="navbar">
                     <div className="nav-container">
                         <ul className={click ? "nav-menu active" : "nav-menu"}>
@@ -39,6 +71,7 @@ export function Home(props) {
                             <li className="nav-item"><NavLink to="/myleadbouldering" className="nav-links" activeClassName="active">My Lead/Bouldering</NavLink></li>
                             <li className="nav-item"><NavLink to="/leadboulderingcompleted" className="nav-links" activeClassName="active">Lead/Bouldering Completed</NavLink></li>
                             <li className="nav-item"><NavLink to="/profile" className="nav-links" activeClassName="active">Profile</NavLink></li>
+                            <li><div className="btnLogout" onClick={handleLogout}>Logout <AiOutlineLogout/></div></li>
                         </ul>
                         <div className="nav-icon" onClick={handleClick}>
                             {/*Add script on index.html */}
@@ -52,7 +85,12 @@ export function Home(props) {
                         <NewLeadBouldView/>
                     </Route>
                     <Route path={'/myleadbouldering'}>
-                        <MyLeadBouldView/>
+                        <MyLeadBouldView
+                        username={username}
+                        username={userUID}/>
+                    </Route>
+                    <Route path={'/profile'}>
+                        <ProfileView/>
                     </Route>
                 </Switch>
             </div>

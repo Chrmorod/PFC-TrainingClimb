@@ -8,6 +8,13 @@
     border-radius: 16px;
     background-color: white;
 }
+.btn-cancel{
+    background: transparent;
+}
+.cancel-container{
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
 .container{
     display: flex;
     justify-content: center;
@@ -15,4 +22,30 @@
 .image-lead-bould {
     width: 100%;
     height: auto;
-  }
+}
+.btninputfile{
+    width:  200px;
+    height: 100px;
+}
+.btn-add-lb{
+    width:  200px;
+    height: 80px;
+    background-color: #5fe46c;
+    margin-bottom: 1.5rem;
+}
+.btncontaineradd{
+    display: flex;
+    justify-content: center;
+}
+.typecontainer{
+    margin-left: 5rem;
+}
+.levelcontainer{
+    margin-left: 5rem;
+}
+.locationcontainer{
+    margin-left: 5rem;
+}
+.indicationscontainter{
+    margin-left: 5rem;
+}
