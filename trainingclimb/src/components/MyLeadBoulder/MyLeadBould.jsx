@@ -10,48 +10,42 @@ export class MyLeadBould extends React.Component
         super(props);
         this.state = {
             myLeadsBoulders : [
-                {imagelb:"", 
-                imageuser:"",
-                indications:"",
-                level:"",
-                location:"",
-                published:"",
-                type:""
+                {id : { 
+                    imagelb:"", 
+                    imageuser:"",
+                    indications:"",
+                    level:"",
+                    location:"",
+                    published:"",
+                    type:""
+                    }
                 }
             ], 
             clickLB: true,
         }
     }
     componentDidMount(){
-        console.log("username de mylead"+this.props.username+"y este es su UID "+this.props.userUID)
-            let myLeadsBoulders = [];
-            firebs.database().ref().child('MyLeadsBoulders').child(this.props.userUID).get().then((snapshot) => {
+            const dbRef = firebs.database().ref().child('MyLeadsBoulders').child(this.props.userUID);
+            dbRef.get().then((snapshot) => {
+                console.log("este es el snapshot primero" +snapshot.key)
+                let myLeadsBoulders =[];
                 snapshot.forEach(snap =>{
-                    //console.log("Este es el snap: "+snap.val())
-                    myLeadsBoulders.push(snap.val());
-                    this.setState({
-                        imagelb:myLeadsBoulders[0],
-                        imageuser:myLeadsBoulders[1],
-                        indications:myLeadsBoulders[2],
-                        level: myLeadsBoulders[3],
-                        location:myLeadsBoulders[4],
-                        publised:myLeadsBoulders[5],
-                        type:myLeadsBoulders[6],
-                    });
+                    console.log("Este es el snap key: "+snap.length)
+                    dbRef.child(snap.key).get().then(snap2 => {
+                        console.log("Este es el snap2: "+snap2.val().type)
+                        myLeadsBoulders.push(snap2.val());
+                        console.log("Este es el array" +this.state.myLeadsBoulders)
+                        this.setState({
+                            myLeadsBoulders: myLeadsBoulders
+                        })
+                    })
                 })
-                console.log(this.state.imagelb)
-                //console.log(myLeadsBoulders)
+                //Aqui cuenta 0
+                //console.log(myLeadsBoulders.length)
             })
+
+
     }
-    /*getUIDuser = () =>{
-        firebs.auth().onAuthStateChanged((userdata) =>{
-            if(userdata){
-                const userUID = userdata.uid;
-               // console.log(userUID)
-                this.setState({userUID:this.state.userUID});
-            }
-        })
-    }*/
     handleaddLeadBoulder = () =>{
         this.setState({
             clickLB:false
@@ -63,39 +57,48 @@ export class MyLeadBould extends React.Component
             {this.state.clickLB ? (
                 <>
                 <div>
+                    <div className="add-button-lb">
+                        <Button
+                        tooltip="Add Lead/Bouldering"
+                        icon="fas fa-plus"
+                        rotate={true}
+                        styles={{backgroundColor: "#5fe46c"}}
+                        onClick={this.handleaddLeadBoulder}
+                        />
+                    </div>
                     <div>
                         {this.state.myLeadsBoulders.map(data => {
-                            console.log("HOLAAAAAAAAAA  "+this.state.imagelb)
-                            return(
-                                <>
-                                    <div className="card-added">
-                                    <Card
-                                    imageURL={this.state.imagelb}
-                                    level={this.state.level}
-                                    type={this.state.type}
-                                    location={this.state.location}
-                                    published={this.state.published}
-                                    profile={this.state.imageuser}
-                                    iconapp='https://firebasestorage.googleapis.com/v0/b/trainingclimb-dcb7a.appspot.com/o/climberlogo.svg?alt=media&token=a3b4474a-682d-4239-bcc2-30bdb892e872'
-                                    />
-                                    </div>
-                                </>
-                            )
+                            //Con length: cuenta 1 en this.state.myLeadsBoulders.length
+                            if(data.imagelb===undefined){
+                                return(
+                                    <div className="noDataMylb"><p>No data added</p></div>
+                                )
+                            }
+                            console.log("datos "+this.state.myLeadsBoulders.length)
+                                return(
+                                    <>
+                                        <div className="card-added">
+                                            <Card
+                                            imageURL={data.imagelb}
+                                            level={data.level}
+                                            type={data.type}
+                                            location={data.location}
+                                            published={data.published}
+                                            profile={data.imageuser}
+                                            iconapp='https://firebasestorage.googleapis.com/v0/b/trainingclimb-dcb7a.appspot.com/o/climberlogo.svg?alt=media&token=a3b4474a-682d-4239-bcc2-30bdb892e872'
+                                            />
+                                        </div>
+                                    </>
+                                )
+                            
                         })}
                     </div>
                 </div>
-                <div className="add-button-lb">
-                    <Button
-                    tooltip="Add Lead/Bouldering"
-                    icon="fas fa-plus"
-                    rotate={true}
-                    styles={{backgroundColor: "#5fe46c"}}
-                    onClick={this.handleaddLeadBoulder}
-                    />
-                </div>
                 </>
             ):(
-                <AddLeadBoulder/>
+                <AddLeadBoulder
+                 username ={this.props.username}
+                 userUID ={this.props.userUID}/>
             )}
             </>
         )

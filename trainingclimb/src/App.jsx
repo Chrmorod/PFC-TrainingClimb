@@ -65,8 +65,24 @@ export function App(){
        firebs
            .auth()
            .createUserWithEmailAndPassword(email,password)
-           .then((userCredential)=>{
-               const userdata =userCredential.user;
+           .then(()=>{
+                firebs.auth().onAuthStateChanged((userdata) =>{
+                    if(userdata){
+                        console.log("este es el UID APPJSX"+ userdata.uid)
+                        const userUID = userdata.uid;
+                        firebs.database().ref('Users/'+userUID+"/").set({
+                            email: email,  
+                            username: username,
+                            image: image
+                        });
+                        setUserUID(userUID);
+                        setUserName(username);
+                    }
+                    /*firebs.database().ref().child('Users').child(userUID).get().then((snapshot) => {
+                        const username = snapshot.val().username;
+                        setUserName(username);
+                    })*/
+                })
            })
            .catch(err => {
                switch(err.code){
@@ -79,16 +95,6 @@ export function App(){
                        break;
                }
            })
-           firebs.auth().onAuthStateChanged((userdata) =>{
-                if(userdata){
-                    const userUID = userdata.uid;
-                    firebs.database().ref('Users/'+userUID+"/").set({
-                        email: email,  
-                        username: username,
-                        image: image
-                    });
-                }
-            })
    }
    const handleLogout = () =>{
        firebs

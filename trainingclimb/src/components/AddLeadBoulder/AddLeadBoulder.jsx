@@ -18,6 +18,8 @@ export class AddLeadBoulder extends React.Component
             published:"",
             type:"",
             indications:"",
+            username:"",
+            userUID :""
         }
         this.typeChange = this.typeChange.bind(this);
         this.levelChange = this.levelChange.bind(this);
@@ -57,12 +59,13 @@ export class AddLeadBoulder extends React.Component
         this.setState({
             files : files
         })
-        const preview = document.querySelector('img');
+        const preview = document.getElementById('new-img');
         const file = document.querySelector('input[type=file]').files[0];
         const reader = new FileReader();
       
         reader.addEventListener("load", function () {
           // convert image file to base64 string
+          console.log(reader.result)
           preview.src = reader.result;
           const btnInputImg = document.getElementById('btn-img');
           btnInputImg.style.display="none";
@@ -85,18 +88,32 @@ export class AddLeadBoulder extends React.Component
                     firebs.auth().onAuthStateChanged((userdata) =>{
                         if(userdata){
                             const userUID = userdata.uid;
+                            //My leads and bouldering part
                             firebs.database().ref().child('Users').child(userUID).get().then((snapshot) => {
                                 const username = snapshot.val().username;
-                                firebs.database().ref('MyLeadsBoulders/'+userUID+"/").set({
-                                    imagelb: downloadURL,
-                                    imageuser: "https://firebasestorage.googleapis.com/v0/b/trainingclimb-dcb7a.appspot.com/o/profiles%2Fprofiledefault.png?alt=media&token=47977950-2113-4f52-a9f9-134e80090379"
-                                    ,level: this.state.selectedLevel
-                                    ,location: this.state.location
-                                    ,published: username
-                                    ,type: this.state.selectedType
-                                    ,indications:this.state.indications
+                                firebs.database().ref('MyLeadsBoulders/'+userUID+'/').push({
+                                        imagelb: downloadURL
+                                        ,imageuser: "https://firebasestorage.googleapis.com/v0/b/trainingclimb-dcb7a.appspot.com/o/profiles%2Fprofiledefault.png?alt=media&token=47977950-2113-4f52-a9f9-134e80090379"
+                                        ,level: this.state.selectedLevel
+                                        ,location: this.state.location
+                                        ,published: username
+                                        ,type: this.state.selectedType
+                                        ,indications:this.state.indications
                                 });
-                            })    
+                            })
+                            //New leads and bouldering part
+                            firebs.database().ref().child('Users').child(userUID).get().then((snapshot) => {
+                                const username = snapshot.val().username;
+                                firebs.database().ref('LeadsBoulders/').push({
+                                        imagelb: downloadURL
+                                        ,imageuser: "https://firebasestorage.googleapis.com/v0/b/trainingclimb-dcb7a.appspot.com/o/profiles%2Fprofiledefault.png?alt=media&token=47977950-2113-4f52-a9f9-134e80090379"
+                                        ,level: this.state.selectedLevel
+                                        ,location: this.state.location
+                                        ,published: username
+                                        ,type: this.state.selectedType
+                                        ,indications:this.state.indications
+                                });
+                            })        
                         }
                     })
                 });
@@ -107,7 +124,9 @@ export class AddLeadBoulder extends React.Component
         return(
             <>
                 {this.state.isCancel ? (
-                        <MyLeadBould/>
+                        <MyLeadBould 
+                         username={this.props.username}
+                         userUID={this.props.userUID}/>
                 ):(
                     <div className="container">
                         <div className="add-content-lb">

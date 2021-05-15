@@ -1,4 +1,11 @@
 .card-added{
     float: left;
 }
-
+.add-button-lb{
+    float: initial;
+}
+.noDataMylb{
+    margin-top: 1.5rem;
+    text-align: center;
+    color: #666666
+}

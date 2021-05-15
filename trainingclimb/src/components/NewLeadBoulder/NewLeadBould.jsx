@@ -6,7 +6,20 @@ export class NewLeadBould extends React.Component
 {
     constructor(props) {
         super(props);
-        this.state = {leadsBoulders : []}
+        this.state = {
+            leadsBoulders : [
+                {id : { 
+                    imagelb:"", 
+                    imageuser:"",
+                    indications:"",
+                    level:"",
+                    location:"",
+                    published:"",
+                    type:""
+                    }
+                }
+            ]
+        }
     }
     componentDidMount(){
         const leadBoulderRef = firebs.database().ref("LeadsBoulders");
@@ -23,15 +36,17 @@ export class NewLeadBould extends React.Component
                 <div>
                     {this.state.leadsBoulders.map(data => {
                         return(
-                            <Card
-                            imageURL={data.imagelb}
-                            level={data.level}
-                            type={data.type}
-                            location={data.location}
-                            published={data.published}
-                            profile={data.imageuser}
-                            iconapp='https://firebasestorage.googleapis.com/v0/b/trainingclimb-dcb7a.appspot.com/o/climberlogo.svg?alt=media&token=a3b4474a-682d-4239-bcc2-30bdb892e872'
-                            />
+                            <div className="card-added-newleads">
+                                <Card
+                                imageURL={data.imagelb}
+                                level={data.level}
+                                type={data.type}
+                                location={data.location}
+                                published={data.published}
+                                profile={data.imageuser}
+                                iconapp='https://firebasestorage.googleapis.com/v0/b/trainingclimb-dcb7a.appspot.com/o/climberlogo.svg?alt=media&token=a3b4474a-682d-4239-bcc2-30bdb892e872'
+                                />
+                            </div>
                         )
                     })}
                 </div>
