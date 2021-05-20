@@ -98,7 +98,8 @@ export class MyLeadBould extends React.Component
             ):(
                 <AddLeadBoulder
                  username ={this.props.username}
-                 userUID ={this.props.userUID}/>
+                 userUID ={this.props.userUID}
+                 clickLB ={this.state.clickLB}/>
             )}
             </>
         )

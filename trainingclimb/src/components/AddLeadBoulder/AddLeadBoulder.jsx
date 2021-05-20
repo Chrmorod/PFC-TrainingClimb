@@ -52,7 +52,8 @@ export class AddLeadBoulder extends React.Component
     }
     handleCancel(){
         this.setState({
-            isCancel:true
+            isCancel:true, 
+            clickLB: false
         })
     }
     handleChange (files) {
@@ -119,6 +120,7 @@ export class AddLeadBoulder extends React.Component
                 });
             }
         );
+        this.handleCancel();
     }
     render(){
         return(

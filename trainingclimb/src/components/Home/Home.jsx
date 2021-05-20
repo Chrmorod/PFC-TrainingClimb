@@ -9,6 +9,8 @@ import { Profile } from "../Profile/Profile";
 export function Home(props) {
     const {
         handleLogout,
+        email,
+        password,
         username,
         userUID,
         image
@@ -37,7 +39,6 @@ export function Home(props) {
           console.log("Este es el user "+this.state.username)
           this.setState({username:this.state.username})
           this.setState({userUID:this.state.userUID})
-          console.log("Este es el user2 "+username+"este es su UID "+ userUID)
         }
         render(){
           return (
@@ -50,10 +51,26 @@ export function Home(props) {
         }
     }
     class ProfileView extends React.Component{
+          constructor(props) {
+            super(props);
+            this.state = {
+              username:username,
+              password:password,
+              email:email
+            }
+        }
+        componentDidMount(){
+         this.setState({email:this.state.email})
+         this.setState({username:this.state.username})
+         this.setState({password:this.state.password})
+        }
         render(){
           return (
             <div>
-              <Profile></Profile>
+              <Profile
+              username ={username}
+              email={email}
+              password={password}/>
             </div>
           )
         }
@@ -87,10 +104,14 @@ export function Home(props) {
                     <Route path={'/myleadbouldering'}>
                         <MyLeadBouldView
                         username={username}
-                        username={userUID}/>
+                        userUID={userUID}/>
                     </Route>
                     <Route path={'/profile'}>
-                        <ProfileView/>
+                        <ProfileView
+                        username={username}
+                        email={email}
+                        password={password}
+                        />
                     </Route>
                 </Switch>
             </div>

@@ -1,0 +1,24 @@
+.container-header-profile{
+    display: flex;
+    justify-content: space-between;
+}
+.header-item-profile{
+    margin-top: 5rem;
+    margin-left: 10rem;
+    margin-right: 10rem;
+    background-color: #cecbcb;
+    padding: 1rem;
+    color: #666666;
+    border-style: dashed;
+    border-width: 0.15rem;
+    border-color: black;
+}
+.picture-profile{
+    width: 50px;
+    height: 50px;
+}
+.container-btn-update{
+    display: flex;
+    margin-top: 5rem;
+    justify-content: center;
+}

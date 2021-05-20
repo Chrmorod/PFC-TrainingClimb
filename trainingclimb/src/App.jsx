@@ -43,8 +43,12 @@ export function App(){
                setUserUID(userUID);
                firebs.database().ref().child('Users').child(userUID).get().then((snapshot) => {
                    const username = snapshot.val().username;
+                   const image = snapshot.val().image;
                    setUserName(username);
-                   
+                   //Send email and password to Home
+                   setEmail(email)
+                   setPassword(password)
+                   setImage(image);
                })
            })
            .catch(err => {
@@ -126,7 +130,9 @@ export function App(){
             handleLogout={handleLogout}
             username={username}
             userUID={userUID}
-            image={image}/>
+            image={image}
+            email={email}
+            password={password}/>
           ):(
             <Login 
             image ={image}
