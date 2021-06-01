@@ -1,0 +1,37 @@
+.img-lead-bould{
+    margin-top: 2rem;
+    width: 500px;
+    height: 600px;
+}
+.img-lead-bould-container{
+    text-align: center;
+}
+.btncontainerupdate{
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+.btn-upd-lb{
+    width:  200px;
+    height: 80px;
+    background-color: #e4a65f;
+    margin-bottom: 1.5rem;
+    border: none;
+    outline: none;
+    border-radius: 0.5em;
+    cursor: pointer;
+}
+.btncontainerdelete{
+    display: flex;
+    justify-content: center;
+}
+.btn-del-lb{
+    width:  200px;
+    height: 80px;
+    background-color: #e45f5f;
+    margin-bottom: 1.5rem;
+    border: none;
+    outline: none;
+    border-radius: 0.5em;
+    cursor: pointer;
+}

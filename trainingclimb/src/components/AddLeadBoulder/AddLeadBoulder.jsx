@@ -2,6 +2,7 @@ import React from 'react';
 import "./AddLeadBoulder.css";
 import firebs from '../../services/firebs';
 import { MyLeadBould } from '../MyLeadBoulder/MyLeadBould';
+import moment from 'moment';
 export class AddLeadBoulder extends React.Component
 {
     constructor(props) {
@@ -12,14 +13,15 @@ export class AddLeadBoulder extends React.Component
             files:null,
             isCancel:false,
             imagelb:"",
-            imageuser:"",
+            profile:"",
             level:"",
             location:"",
             published:"",
             type:"",
             indications:"",
             username:"",
-            userUID :""
+            userUID :"",
+            dateadd:""
         }
         this.typeChange = this.typeChange.bind(this);
         this.levelChange = this.levelChange.bind(this);
@@ -53,7 +55,7 @@ export class AddLeadBoulder extends React.Component
     handleCancel(){
         this.setState({
             isCancel:true, 
-            clickLB: false
+            clickLB: true
         })
     }
     handleChange (files) {
@@ -68,6 +70,9 @@ export class AddLeadBoulder extends React.Component
           // convert image file to base64 string
           console.log(reader.result)
           preview.src = reader.result;
+          preview.style.width= "500px";
+          preview.style.height= "600px";
+          preview.style.marginTop ="2rem";
           const btnInputImg = document.getElementById('btn-img');
           btnInputImg.style.display="none";
         }, false);
@@ -86,37 +91,29 @@ export class AddLeadBoulder extends React.Component
             () =>{
                 storageRef.getDownloadURL().then((url) => {
                     let downloadURL = url;
-                    firebs.auth().onAuthStateChanged((userdata) =>{
-                        if(userdata){
-                            const userUID = userdata.uid;
-                            //My leads and bouldering part
-                            firebs.database().ref().child('Users').child(userUID).get().then((snapshot) => {
-                                const username = snapshot.val().username;
-                                firebs.database().ref('MyLeadsBoulders/'+userUID+'/').push({
-                                        imagelb: downloadURL
-                                        ,imageuser: "https://firebasestorage.googleapis.com/v0/b/trainingclimb-dcb7a.appspot.com/o/profiles%2Fprofiledefault.png?alt=media&token=47977950-2113-4f52-a9f9-134e80090379"
-                                        ,level: this.state.selectedLevel
-                                        ,location: this.state.location
-                                        ,published: username
-                                        ,type: this.state.selectedType
-                                        ,indications:this.state.indications
-                                });
-                            })
-                            //New leads and bouldering part
-                            firebs.database().ref().child('Users').child(userUID).get().then((snapshot) => {
-                                const username = snapshot.val().username;
-                                firebs.database().ref('LeadsBoulders/').push({
-                                        imagelb: downloadURL
-                                        ,imageuser: "https://firebasestorage.googleapis.com/v0/b/trainingclimb-dcb7a.appspot.com/o/profiles%2Fprofiledefault.png?alt=media&token=47977950-2113-4f52-a9f9-134e80090379"
-                                        ,level: this.state.selectedLevel
-                                        ,location: this.state.location
-                                        ,published: username
-                                        ,type: this.state.selectedType
-                                        ,indications:this.state.indications
-                                });
-                            })        
-                        }
-                    })
+                    //My leads and bouldering part
+                    const myleadbould = firebs.database().ref('MyLeadsBoulders/'+this.props.userUID+'/').push({
+                         imagelb: downloadURL
+                        ,profile: this.props.imageuser
+                        ,level: this.state.selectedLevel
+                        ,location: this.state.location
+                        ,published: this.props.username
+                        ,type: this.state.selectedType
+                        ,indications:this.state.indications
+                        ,dateadd: moment().format("DD/MM/YYYY")
+                    });
+                    //New leads and bouldering part
+                    firebs.database().ref('LeadsBoulders/'+myleadbould.key+'/').set({
+                        id: myleadbould.key
+                       ,imagelb: downloadURL
+                       ,profile: this.props.imageuser
+                       ,level: this.state.selectedLevel
+                       ,location: this.state.location
+                       ,published: this.props.username
+                       ,type: this.state.selectedType
+                       ,indications:this.state.indications
+                       ,dateadd: moment().format("DD/MM/YYYY")
+                    });    
                 });
             }
         );
@@ -135,7 +132,7 @@ export class AddLeadBoulder extends React.Component
                             <div className="cancel-container">
                                 <div className="btn-cancel" onClick={this.handleCancel}>X</div>
                             </div>
-                            <div>             
+                            <div className="img-lead-bould-container">             
                                 <img id="new-img" onClick={() => this.fileInput.current.click()}/>
                                 <input type="file" onChange={(e)=>{this.handleChange(e.target.files)}} ref={this.fileInput} style={{ display: "none" }}/>
                             </div>
@@ -201,7 +198,7 @@ export class AddLeadBoulder extends React.Component
 
                             </div>
                             <div className="btncontaineradd">
-                                <button className="btn-add-lb" onClick={this.handleFileUpload}>Add Lead/Bouldering</button>
+                                <button className="btn-add-lb" onClick={()=>this.handleFileUpload()}>Add Lead/Bouldering</button>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,56 @@
+.img-lead-bould{
+    margin-top: 2rem;
+    width: 500px;
+    height: 600px;
+}
+.img-lead-bould-container{
+    text-align: center;
+}
+.typecontainer-detail{
+    margin-left: 5rem;
+    margin-bottom: 1.5rem;
+}
+.levelcontainer-detail{
+    margin-left: 5rem;
+    margin-bottom: 1.5rem;
+}
+.locationcontainer-detail{
+    margin-left: 5rem;
+    margin-bottom: 1.5rem;
+}
+.indicationscontainter-details{
+    margin-left: 5rem;
+    margin-bottom: 0.5rem;  
+}
+.btn-cancel-details{
+    font-size: 25px;
+    margin-left: 15rem;
+    margin-top: 5rem;
+    color:white;
+    background-color: #666;
+    display: inline-block;
+    padding: 0.5rem;
+    border-radius: 5%;
+    cursor: pointer;
+}
+.title-details{
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    padding: 0.5rem;
+    border-radius: 5%;
+    display: inline-block;
+}
+.content-details{
+    margin-left: 3.5rem;
+    font-size: 15px;
+}
+textarea {
+    width: 100%;
+    height: 100px;
+    background-color: rgb(233, 232, 232);
+    color:rgba(39, 39, 39, 0.8);
+    font-size: 12px;
+}
+

@@ -57,16 +57,13 @@ export class Profile extends React.Component
         console.log(this.state.confirmPassword);
         let user = firebs.auth().currentUser;
         user.updatePassword(this.state.confirmPassword);
-        //firebs.auth().signInWithEmailAndPassword(this.state.email,this.state.confirmPassword);
-        //Avisar de que la contraseña se ha actualizado
     }
     handleGetImageProfile(){
-        console.log("Holaaa!")
         let user = firebs.auth().currentUser;
         if(user != null){
             let userUID =user.uid;
             firebs.database().ref().child('Users').child(userUID).get().then((snapshot) => {
-                let photoURL= snapshot.val().image;
+                let photoURL= snapshot.val().imageuser;
                 this.setState({
                     photoURL: photoURL
                 })
@@ -84,23 +81,23 @@ export class Profile extends React.Component
                 <div className="header-item-profile">
                     <p>Personal Data</p>
                     <div className="profile-input">
-                        <input placeholder={this.state.email} readOnly></input>
-                        <input placeholder={this.state.username} readOnly></input>
+                        <input className="input-text" placeholder={this.state.email} readOnly></input>
+                        <input className="input-text" placeholder={this.state.username} readOnly></input>
                     </div>
 
                 </div>
                 <div className="header-item-profile">
                     <p>Security</p>
                     <div className="profile-input">
-                        <input type="password" placeholder="Current Password" value={this.state.currentPassword} onChange={(e) =>this.handlePasswordVerify(e.target.value)}></input>
+                        <input className="input-text" type="password" placeholder="Current Password" value={this.state.currentPassword} onChange={(e) =>this.handlePasswordVerify(e.target.value)}></input>
                         <p>{this.state.msgVerificationError}</p>
-                        <input type="password" placeholder="New Password" value={this.state.newPassword} onChange={(e) =>this.handleNewPassword(e.target.value)}></input>
-                        <input type="password" placeholder="Confirm Password" value={this.state.confirmPassword} onChange={(e) =>this.handleConfirmPassword(e.target.value)}></input>
+                        <input className="input-text" type="password" placeholder="New Password" value={this.state.newPassword} onChange={(e) =>this.handleNewPassword(e.target.value)}></input>
+                        <input className="input-text" type="password" placeholder="Confirm Password" value={this.state.confirmPassword} onChange={(e) =>this.handleConfirmPassword(e.target.value)}></input>
                         <p>{this.state.msgPasswordMatch}</p>
                     </div>
-                </div>
+                </div> 
             </div>
-            <div className="container-btn-update"><button onClick={()=>this.handleUpdateProfile()}>Update</button></div>
+            <div className="container-btn-update"><button className="btnUpdateDataProfile" onClick={()=>this.handleUpdateProfile()}>Update</button></div>
             </>
         )
     }

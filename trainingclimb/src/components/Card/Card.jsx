@@ -1,32 +1,18 @@
-import React, {useState} from 'react'
+import React from 'react'
 import "./Card.css"
-import { Details } from '../Detail/Details';
-export function Card({imageURL, type, level, location, published,profile, iconapp}){
-    const [clickDetail,setClickDetail] =useState(true);
-    const handleClickDetail = () => setClickDetail(!clickDetail);
+export function Card({id,imageURL, dateadd, type, level, location, published,profile, iconapp}){
     return(
-            <>
-            {clickDetail ? (
-                <div className="card-container" onClick={handleClickDetail}>
-                    <div className="image-container">
-                        <img className="image-lead-bould" src={imageURL}/>
-                    </div>
-                    <div className="card-content">
-                            <p>Lvl: {level}</p>
-                            <p>Type: {type}</p>
-                            <p>Location: {location}</p>
-                            <p>Published: {published}</p>
-                            <div className="card-footer-content">
-                            <img className ="image-profile" src={profile}/>
-                            <img className ="image-logoapp"src={iconapp}/>
-                        </div>            
-                    </div>
-                </div>
-            ):(
-                <Details/>
-            )}
-            </>
-
-
+            <div key={id} className="card-container">
+                <img className="image-lead-bould" src={imageURL}/>  
+                <div className="content">
+                    <p className="dateadd">{dateadd}</p>
+                    <p className="item-card-content">Lvl: {level}</p>
+                    <p className="item-card-content">Type: {type}</p>
+                    <p className="item-card-content">Location: {location}</p>
+                    <p className="item-card-content">Published: {published}</p>
+                    <img className ="image-profile" src={profile}/>
+                    <img className ="image-logoapp"src={iconapp}/> 
+                </div> 
+            </div>
     )
 }

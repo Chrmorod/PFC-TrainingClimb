@@ -127,11 +127,12 @@
   }
 }
 .btnLogout{
-  background: #666666;
+  background:transparent;
+  border:none;
   color: #5fe46c;
   margin-top: 0.25rem;
   font-size: 20px;
-
+  cursor: pointer;
 }
 .btnLogout:hover{
   color: red;
