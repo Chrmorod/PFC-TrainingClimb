@@ -57,10 +57,23 @@
 }
 .levelcontainer{
     margin-left: 5rem;
+    margin-bottom: 1rem;
 }
 .locationcontainer{
     margin-left: 5rem;
+    margin-bottom: 1rem;
 }
 .indicationscontainter{
     margin-left: 5rem;
+}
+.radio-btn-add{
+    margin-left: 0.5rem;
+}
+.input-location-add{
+    width: 30%;
+    height: 2rem;
+    background-color: rgb(233, 232, 232);
+    border:none;
+    border-radius: 0.25rem;
+    padding-left: 0.25rem;
 }

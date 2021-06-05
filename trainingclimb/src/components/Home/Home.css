@@ -114,7 +114,9 @@
     width: 100%;
     display: table;
   }
-
+  .container-btn-logout{
+      margin-bottom: 1rem;
+  }
   .nav-icon {
     display: block;
     position: absolute;
@@ -131,11 +133,15 @@
   border:none;
   color: #5fe46c;
   margin-top: 0.25rem;
-  font-size: 20px;
+  font-size: 24px;
   cursor: pointer;
 }
 .btnLogout:hover{
   color: red;
+}
+.container-btn-logout{
+  line-height: 40px;
+  margin-right: 1rem;
 }
 .header-home{
   background-color:#666666;
@@ -150,16 +156,4 @@
   margin-left:1em;
   margin-right: 0.5em;
 }
-/*.pictureuser{
-  width: 35px;
-  height: 35px;
-  background: url("../../images/climberlogo.svg");
-  border-radius: 50%;
-  background-color: white;
-  margin:0.5em;
-  margin-left: 1.5em;
-  margin-bottom: 1.5em;
-  justify-content: center;
-  display: flex;
-}*/
   

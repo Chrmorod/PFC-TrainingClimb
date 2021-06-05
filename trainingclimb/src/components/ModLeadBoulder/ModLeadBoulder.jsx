@@ -3,6 +3,7 @@ import "./ModLeadBoulder.css";
 import firebs from '../../services/firebs';
 import { MyLeadBould } from '../MyLeadBoulder/MyLeadBould';
 import moment from 'moment';
+import Swal from 'sweetalert2'
 export class ModLeadBoulder extends React.Component
 {
     constructor(props) {
@@ -89,18 +90,44 @@ export class ModLeadBoulder extends React.Component
         }
     }
     handleFileUpload(){
-        let file  = this.state.files[0];
-        let storageRef = firebs.storage().ref(`myleadbould/${file.name}`);
-        let uploadTask = storageRef.put(file);
-        uploadTask.on('state_changed',
-            null,
-            null,
-            () =>{
-                storageRef.getDownloadURL().then((url) => {
-                    let downloadURL = url;
-                    //My leads and bouldering part
-                    firebs.database().ref('MyLeadsBoulders/'+this.props.userUID+'/'+this.props.id).update({
-                         imagelb: downloadURL
+            let file  = this.state.files[0];
+            let storageRef = firebs.storage().ref(`myleadbould/${file.name}`);
+            let uploadTask = storageRef.put(file);
+            uploadTask.on('state_changed',
+                (snapshot) =>{
+                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    if(progress==100){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Your Lead/Bouldering has been updated',
+                            showConfirmButton: true,
+                        })
+                    }
+                },
+                () =>{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!',
+                    })
+                },
+                () =>{
+                    storageRef.getDownloadURL().then((url) => {
+                        let downloadURL = url;
+                        //My leads and bouldering part
+                        firebs.database().ref('MyLeadsBoulders/'+this.props.userUID+'/'+this.props.id).update({
+                            imagelb: downloadURL
+                            ,profile: this.props.imageuser
+                            ,level: this.state.selectedLevel
+                            ,location: this.state.location
+                            ,published: this.props.username
+                            ,type: this.state.selectedType
+                            ,indications:this.state.indications
+                            ,dateadd: moment().format("DD/MM/YYYY")
+                        });
+                        //New leads and bouldering part
+                        firebs.database().ref('LeadsBoulders/'+this.props.id+'/').update({
+                            imagelb: downloadURL
                         ,profile: this.props.imageuser
                         ,level: this.state.selectedLevel
                         ,location: this.state.location
@@ -108,29 +135,47 @@ export class ModLeadBoulder extends React.Component
                         ,type: this.state.selectedType
                         ,indications:this.state.indications
                         ,dateadd: moment().format("DD/MM/YYYY")
+                        });    
                     });
-                    //New leads and bouldering part
-                    firebs.database().ref('LeadsBoulders/'+this.props.id+'/').update({
-                        imagelb: downloadURL
-                       ,profile: this.props.imageuser
-                       ,level: this.state.selectedLevel
-                       ,location: this.state.location
-                       ,published: this.props.username
-                       ,type: this.state.selectedType
-                       ,indications:this.state.indications
-                       ,dateadd: moment().format("DD/MM/YYYY")
-                    });    
-                });
-            }
-        );
-        this.handleCancel();
+                }
+            );
+            this.handleCancel();
     }
     handleDeleteFile(){
-        const deleterefimgLB = firebs.database().ref('LeadsBoulders/'+this.props.id);
-        const deleterefimgMyLB = firebs.database().ref('MyLeadsBoulders/'+this.props.userUID+'/'+this.props.id);
-        //Delete on database
-        deleterefimgMyLB.remove();
-        deleterefimgLB.remove();
+        const swalWithBootstrapButtons = Swal.mixin({
+            buttonsStyling: true
+        })
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+              swalWithBootstrapButtons.fire(
+                'Deleted!',
+                'Your Lead/Bouldering has been deleted.',
+                'success'
+              )
+              const deleterefimgLB = firebs.database().ref('LeadsBoulders/'+this.props.id);
+              const deleterefimgMyLB = firebs.database().ref('MyLeadsBoulders/'+this.props.userUID+'/'+this.props.id);
+              //Delete on database
+              deleterefimgMyLB.remove();
+              deleterefimgLB.remove();
+            } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Your Lead/Bouldering continue save :)',
+                'error'
+              )
+            }
+        })
         this.handleCancel();
     }
     render(){

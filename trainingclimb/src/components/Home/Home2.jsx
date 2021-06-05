@@ -10,21 +10,17 @@ import { Profile } from "../Profile/Profile";
     class NewLeadBouldView extends React.Component{
       render(){
         return (
-          <div>
             <NewLeadBould/>
-          </div>
         )
       }
   }
   class MyLeadBouldView extends React.Component{
       render(){
         return (
-          <div>
             <MyLeadBould 
             username={this.props.username}
             userUID={this.props.userUID}
             imageuser={this.props.imageuser}/>
-          </div>
         )
       }
   }
@@ -34,12 +30,10 @@ import { Profile } from "../Profile/Profile";
       }
       render(){
         return (
-          <div>
             <Profile
             username ={this.props.username}
             email={this.props.email}
             password={this.props.password}/>
-          </div>
         )
       }
   }
@@ -53,13 +47,11 @@ export class Home2 extends React.Component
 
   }
   setClick = (click) => {this.setState({click:click})}
-
   handleLogout(){
     firebs.auth().signOut();
     firebs.database().ref().off();
   }
   render(){
-    console.log("email home"+this.props.email+"pass"+this.props.password)
     return(
       <>
           <div className="header-home">
@@ -71,9 +63,11 @@ export class Home2 extends React.Component
                       <ul className={this.state.click ? "nav-menu active" : "nav-menu"}>
                           <li className="nav-item"><NavLink to="/newleadbouldering" className="nav-links" activeClassName="active">New Lead/Bouldering</NavLink></li>
                           <li className="nav-item"><NavLink to="/myleadbouldering" className="nav-links" activeClassName="active">My Lead/Bouldering</NavLink></li>
-                          <li className="nav-item"><NavLink to="/leadboulderingcompleted" className="nav-links" activeClassName="active">Lead/Bouldering Completed</NavLink></li>
+                          {/*<li className="nav-item"><NavLink to="/leadboulderingcompleted" className="nav-links" activeClassName="active">Lead/Bouldering Completed</NavLink></li>*/}
                           <li className="nav-item"><NavLink to="/profile" className="nav-links" activeClassName="active">Profile</NavLink></li>
-                          <li><NavLink to="/"><button className="btnLogout" onClick={() => this.handleLogout()}>Logout <AiOutlineLogout/></button></NavLink></li>
+                          <li className="container-btn-logout">
+                            <NavLink to="/"><button className="btnLogout" onClick={() => this.handleLogout()}>Logout <AiOutlineLogout/></button></NavLink>
+                          </li>
                       </ul>
                       <div className="nav-icon" onClick={() => this.setClick(!this.state.click)}>
                           {/*Add script on index.html */}

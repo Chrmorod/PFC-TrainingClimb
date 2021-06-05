@@ -3,6 +3,7 @@ import "./AddLeadBoulder.css";
 import firebs from '../../services/firebs';
 import { MyLeadBould } from '../MyLeadBoulder/MyLeadBould';
 import moment from 'moment';
+import Swal from 'sweetalert2'
 export class AddLeadBoulder extends React.Component
 {
     constructor(props) {
@@ -19,8 +20,8 @@ export class AddLeadBoulder extends React.Component
             published:"",
             type:"",
             indications:"",
-            username:"",
-            userUID :"",
+            username:this.props.username,
+            userUID :this.props.userUID,
             dateadd:""
         }
         this.typeChange = this.typeChange.bind(this);
@@ -68,7 +69,6 @@ export class AddLeadBoulder extends React.Component
       
         reader.addEventListener("load", function () {
           // convert image file to base64 string
-          console.log(reader.result)
           preview.src = reader.result;
           preview.style.width= "500px";
           preview.style.height= "600px";
@@ -82,55 +82,79 @@ export class AddLeadBoulder extends React.Component
         }
     }
     handleFileUpload(){
-        let file  = this.state.files[0];
-        let storageRef = firebs.storage().ref(`myleadbould/${file.name}`);
-        let uploadTask = storageRef.put(file);
-        uploadTask.on('state_changed',
-            null,
-            null,
-            () =>{
-                storageRef.getDownloadURL().then((url) => {
-                    let downloadURL = url;
-                    //My leads and bouldering part
-                    const myleadbould = firebs.database().ref('MyLeadsBoulders/'+this.props.userUID+'/').push({
-                         imagelb: downloadURL
-                        ,profile: this.props.imageuser
-                        ,level: this.state.selectedLevel
-                        ,location: this.state.location
-                        ,published: this.props.username
-                        ,type: this.state.selectedType
-                        ,indications:this.state.indications
-                        ,dateadd: moment().format("DD/MM/YYYY")
+        if(this.state.files==null){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Image Lead/Bouldering is mandatory',
+            })
+        }else{
+            let file  = this.state.files[0];
+            let storageRef = firebs.storage().ref(`myleadbould/${file.name}`);
+            let uploadTask = storageRef.put(file);
+            uploadTask.on('state_changed',
+                (snapshot) =>{
+                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    if(progress==100){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Your Lead/Bouldering has been saved',
+                            showConfirmButton: true,
+                        })
+                    }
+                },
+                () =>{ 
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    })
+                },
+                () =>{
+                    storageRef.getDownloadURL().then((url) => {
+                        let downloadURL = url;
+                        //My leads and bouldering part
+                        const myleadbould = firebs.database().ref('MyLeadsBoulders/'+this.state.userUID+'/').push({
+                             imagelb: downloadURL
+                            ,profile: this.props.imageuser
+                            ,level: this.state.selectedLevel
+                            ,location: this.state.location
+                            ,published: this.props.username
+                            ,type: this.state.selectedType
+                            ,indications:this.state.indications
+                            ,dateadd: moment().format("DD/MM/YYYY")
+                        });
+                        //New leads and bouldering part
+                        firebs.database().ref('LeadsBoulders/'+myleadbould.key+'/').set({
+                            id: myleadbould.key
+                           ,imagelb: downloadURL
+                           ,profile: this.props.imageuser
+                           ,level: this.state.selectedLevel
+                           ,location: this.state.location
+                           ,published: this.props.username
+                           ,type: this.state.selectedType
+                           ,indications:this.state.indications
+                           ,dateadd: moment().format("DD/MM/YYYY")
+                        });    
                     });
-                    //New leads and bouldering part
-                    firebs.database().ref('LeadsBoulders/'+myleadbould.key+'/').set({
-                        id: myleadbould.key
-                       ,imagelb: downloadURL
-                       ,profile: this.props.imageuser
-                       ,level: this.state.selectedLevel
-                       ,location: this.state.location
-                       ,published: this.props.username
-                       ,type: this.state.selectedType
-                       ,indications:this.state.indications
-                       ,dateadd: moment().format("DD/MM/YYYY")
-                    });    
-                });
-            }
-        );
-        this.handleCancel();
+                }
+            );
+        }
+        this.handleCancel()
     }
     render(){
         return(
             <>
                 {this.state.isCancel ? (
                         <MyLeadBould 
-                         username={this.props.username}
-                         userUID={this.props.userUID}/>
+                         username={this.state.username}
+                         userUID={this.state.userUID}
+                         imageuser={this.props.imageuser}/>
                 ):(
                     <div className="container">
                         <div className="add-content-lb">
-                            <div className="cancel-container">
-                                <div className="btn-cancel" onClick={this.handleCancel}>X</div>
+                            <div className="cancel-container" onClick={this.handleCancel}>
+                                <div className="btn-cancel">X</div>
                             </div>
                             <div className="img-lead-bould-container">             
                                 <img id="new-img" onClick={() => this.fileInput.current.click()}/>
@@ -142,50 +166,253 @@ export class AddLeadBoulder extends React.Component
                             <div className="typecontainer">
                                 <p>Type:</p>
                                 <label>
-                                    <input type="radio" 
+                                    <input type="radio"
+                                            className="radio-btn-add" 
                                             value="Boulder" 
                                             checked={this.state.selectedType ==="Boulder"}
                                             onChange={this.typeChange} />
                                     Boulder
                                 </label>
                                 <label>
-                                        <input type="radio" 
+                                        <input type="radio"
+                                        className="radio-btn-add" 
                                         value="Lead" 
                                         checked={this.state.selectedType ==="Lead"} 
                                         onChange={this.typeChange}/>
                                         Lead
                                 </label>
                             </div>
-                            <div className="levelcontainer">
-                                <p>Lvl:</p>
-                                <label>
-                                        <input type="radio" 
-                                        value="Expert" 
-                                        checked={this.state.selectedLevel ==="Expert"} 
-                                        onChange={this.levelChange}/>
-                                        Expert
-                                </label>
-                                <label>
-                                        <input type="radio" 
-                                        value="Medium" 
-                                        checked={this.state.selectedLevel ==="Medium"} 
-                                        onChange={this.levelChange}/>
-                                        Medium
-                                </label>
-                                <label>
-                                        <input type="radio" 
-                                        value="Begginer" 
-                                        checked={this.state.selectedLevel ==="Begginer"} 
-                                        onChange={this.levelChange}/>
-                                        Begginer
-                                </label>
-                            </div>
+                            {(this.state.selectedType =="Lead") ? (
+                                <div className="levelcontainer">
+                                    <p>Lvl:</p>
+                                    <label>
+                                            <input type="radio" 
+                                            className="radio-btn-add"
+                                            value="5a" 
+                                            checked={this.state.selectedLevel ==="5a"} 
+                                            onChange={this.levelChange}/>
+                                            5a
+                                    </label>
+                                    <label>
+                                            <input type="radio" 
+                                            className="radio-btn-add"
+                                            value="5b" 
+                                            checked={this.state.selectedLevel ==="5b"} 
+                                            onChange={this.levelChange}/>
+                                            5b
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="5c" 
+                                            checked={this.state.selectedLevel ==="5c"} 
+                                            onChange={this.levelChange}/>
+                                            5c
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="6a" 
+                                            checked={this.state.selectedLevel ==="6a"} 
+                                            onChange={this.levelChange}/>
+                                            6a
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="6a+" 
+                                            checked={this.state.selectedLevel ==="6a+"} 
+                                            onChange={this.levelChange}/>
+                                            6a+
+                                    </label>
+                                    <label>
+                                            <input type="radio" 
+                                            className="radio-btn-add"
+                                            value="6b" 
+                                            checked={this.state.selectedLevel ==="6b"} 
+                                            onChange={this.levelChange}/>
+                                            6b
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="6b" 
+                                            checked={this.state.selectedLevel ==="6b+"} 
+                                            onChange={this.levelChange}/>
+                                            6b+
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="6c" 
+                                            checked={this.state.selectedLevel ==="6c"} 
+                                            onChange={this.levelChange}/>
+                                            6c
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="6c+" 
+                                            checked={this.state.selectedLevel ==="6c+"} 
+                                            onChange={this.levelChange}/>
+                                            6c+
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="7a" 
+                                            checked={this.state.selectedLevel ==="7a"} 
+                                            onChange={this.levelChange}/>
+                                            7a
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="7a+" 
+                                            checked={this.state.selectedLevel ==="7a+"} 
+                                            onChange={this.levelChange}/>
+                                            7a+
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="7b" 
+                                            checked={this.state.selectedLevel ==="7b"} 
+                                            onChange={this.levelChange}/>
+                                            7b
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="7b+" 
+                                            checked={this.state.selectedLevel ==="7b+"} 
+                                            onChange={this.levelChange}/>
+                                            7b+
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="7c" 
+                                            checked={this.state.selectedLevel ==="7c"} 
+                                            onChange={this.levelChange}/>
+                                            7c
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="7c+" 
+                                            checked={this.state.selectedLevel ==="7c+"} 
+                                            onChange={this.levelChange}/>
+                                            7c+
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="8a" 
+                                            checked={this.state.selectedLevel ==="8a"} 
+                                            onChange={this.levelChange}/>
+                                            8a
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="8a+" 
+                                            checked={this.state.selectedLevel ==="8a+"} 
+                                            onChange={this.levelChange}/>
+                                            8a+
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="8b" 
+                                            checked={this.state.selectedLevel ==="8b"} 
+                                            onChange={this.levelChange}/>
+                                            8b
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="8b+" 
+                                            checked={this.state.selectedLevel ==="8b+"} 
+                                            onChange={this.levelChange}/>
+                                            8b+
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="8c" 
+                                            checked={this.state.selectedLevel ==="8c"} 
+                                            onChange={this.levelChange}/>
+                                            8c
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="8c+" 
+                                            checked={this.state.selectedLevel ==="8c+"} 
+                                            onChange={this.levelChange}/>
+                                            8c+
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="9a" 
+                                            checked={this.state.selectedLevel ==="9a"} 
+                                            onChange={this.levelChange}/>
+                                            9a
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="9a+" 
+                                            checked={this.state.selectedLevel ==="9a+"} 
+                                            onChange={this.levelChange}/>
+                                            9a+
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="9b" 
+                                            checked={this.state.selectedLevel ==="9b"} 
+                                            onChange={this.levelChange}/>
+                                            9b
+                                    </label>
+                                </div>
+                            ):(
+                                <div className="levelcontainer">
+                                    <p>Lvl:</p>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="Expert" 
+                                            checked={this.state.selectedLevel ==="Expert"} 
+                                            onChange={this.levelChange}/>
+                                            Expert
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="Medium" 
+                                            checked={this.state.selectedLevel ==="Medium"} 
+                                            onChange={this.levelChange}/>
+                                            Medium
+                                    </label>
+                                    <label>
+                                            <input type="radio"
+                                            className="radio-btn-add" 
+                                            value="Begginer" 
+                                            checked={this.state.selectedLevel ==="Begginer"} 
+                                            onChange={this.levelChange}/>
+                                            Begginer
+                                    </label>
+                                </div>
+                            )}
                             <div className="locationcontainer">
                                 <label>
                                     Location:
                                 </label>
                                 <div>
-                                    <input type="text" name="Location" onChange={this.locationChange} />
+                                    <input className="input-location-add" type="text" name="Location" onChange={this.locationChange} />
                                 </div>
                             </div>
                             <div className="indicationscontainter">

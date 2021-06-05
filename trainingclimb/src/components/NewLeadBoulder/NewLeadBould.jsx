@@ -19,21 +19,25 @@ export class NewLeadBould extends React.Component
                     location:"",
                     published:"",
                     type:"", 
-                    clickDetails:false
                     }
                 }
             ] 
-            ,id:[]
+            ,clickDetails:false
+            ,nodata:true
         }
     }
-    componentDidMount(){
+    async componentDidMount(){
         let leadsBoulders = new Array();
         const leadBoulderRef = firebs.database().ref().child("LeadsBoulders");
-        leadBoulderRef.get().then((snapshot) => {
-            snapshot.forEach(snap =>{
-                leadsBoulders.push(snap.val());
-            })
-            this.setState({leadsBoulders:leadsBoulders});
+        await leadBoulderRef.get().then((snapshot) => {
+            console.log(snapshot.val())
+            if(snapshot.val() != null){
+                snapshot.forEach(snap =>{
+                    leadsBoulders.push(snap.val());
+                })
+                this.setState({nodata:false});
+                this.setState({leadsBoulders:leadsBoulders});
+            }
         })
     }
     handleDetails = (id) =>{
@@ -49,28 +53,34 @@ export class NewLeadBould extends React.Component
                 <Details
                 id={this.state.id}/>
             ):(
-                <div className="leadboulders-container">
-                    <div className="band">
-                        {this.state.leadsBoulders.map(data => {
-                            return(
-                                <div className="card-added-newleads" onClick={() => this.handleDetails(data.id)}>
-                                    <Card
-                                    className="card-item"
-                                    id={data.id}
-                                    imageURL={data.imagelb}
-                                    dateadd={data.dateadd}
-                                    level={data.level}
-                                    type={data.type}
-                                    location={data.location}
-                                    published={data.published}
-                                    profile={data.profile}
-                                    iconapp={logoAPP}
-                                    />
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
+                <>
+                    {this.state.nodata ? (
+                        <p className="noDataMylb">No data added</p>
+                    ):(
+                        <div className="leadboulders-container">
+                            <div className="band">
+                                {this.state.leadsBoulders.map(data => {
+                                    return(
+                                        <div className="card-added-newleads" onClick={() => this.handleDetails(data.id)}>
+                                            <Card
+                                            className="card-item"
+                                            id={data.id}
+                                            imageURL={data.imagelb}
+                                            dateadd={data.dateadd}
+                                            level={data.level}
+                                            type={data.type}
+                                            location={data.location}
+                                            published={data.published}
+                                            profile={data.profile}
+                                            iconapp={logoAPP}
+                                            />
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </>
             )}
             </>
         )

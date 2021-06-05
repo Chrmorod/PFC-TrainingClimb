@@ -4,7 +4,6 @@
   padding: 0;
   font-family: "Nunito", sans-serif;
 }
-
 .btnlogreg {
   border: none;
   outline: none;
@@ -16,6 +15,14 @@
   letter-spacing: 1px;
   background: #191a19;
   cursor: pointer;
+  margin-top: 1.5rem;
+}
+.container-pass-reg{
+  color: #3a8b42;
+  font-size: 12px;
+  float: right;
+  margin-top:0.5rem;
+  height: 5rem;
 }
 .login {
   width: 100%;
@@ -31,7 +38,7 @@
   width: 100%;
   max-width: 520px;
   min-height: 600px;
-  border-radius: 5%;
+  border-radius: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -59,19 +66,23 @@
   letter-spacing: 1px;
 }
 
-.login .containerlogin .btncontainer {
+.login .containerlogin .logcontainer {
   width: 100%;
   padding: 24px 0;
 }
-
-.login .containerlogin .btncontainer p {
+/*p*/
+.login .containerlogin .logcontainer {
   margin: 14px 0 0 0;
-  text-align: right;
   color: #fff;
 }
+p{
+  margin: 14px 0 0 0;
+  text-align: left;
+  color: #999;
+}
 
-.login .containerlogin .btncontainer p span {
-  color: rgb(0, 59, 252);
+.login .containerlogin .logcontainer span {
+  color: #3a8b42;
   font-weight: 500;
   letter-spacing: 0.5px;
   margin-left: 5px;
@@ -79,13 +90,17 @@
   transition: all 400ms ease-in-out;
 }
 
-.login .containerlogin .btncontainer p span:hover {
-  color: red;
+.login .containerlogin .logcontainer span:hover {
+  color: rgb(253, 225, 174);
 }
 
-.login .containerlogin .errorMessage {
-  color: red;
+.login .containerlogin{
+  color: #3a8b42;
   font-size: 16px;
+}
+.errorMessage {
+  color: red;
+  font-size: 12px;
 }
 .logo{
   width: 50px;
@@ -110,4 +125,10 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
+}
+.question-account{
+  color: #fff;
+}
+.forgot-pass .account-created{
+  color:rgb(253, 225, 174);
 }

@@ -1,28 +1,33 @@
 .container-header-profile{
-    display: flex;
-    justify-content: space-between;
+    overflow: hidden;
+    width: 100%;
 }
 .header-item-profile{
     margin-top: 3rem;
-    margin-left: 2.5rem;
-    margin-right: 2.5rem;
+    margin-left: 11rem;
+    margin-right: 3rem;
+    margin-bottom: 3rem;
     background-color: #cecbcb;
     padding: 3rem;
     color: #666666;
     border-style: none;
     border-radius: 16px;
     width: 20rem;
+    height: 20rem;
     text-align: center;
     box-shadow: 0px 0px 15px 0px;
+    float: left;
 }
 .picture-profile{
     margin-top: 1rem;
-    width: 150px;
-    height: 150px;
+    width: 10rem;
+    height: 10rem;
+    border:none;
+    border-radius: 50%;
 }
 .container-btn-update{
     display: flex;
-    margin-top: 3rem;
+    margin-top: 2rem;
     justify-content: center;
 }
 .input-text{
@@ -33,13 +38,29 @@
     border-style: none;
     padding-left: 0.5rem;
 }
+.input-text-lock{
+    margin-top: 1rem;
+    min-width: 13rem;
+    height: 1.8rem;
+    border-radius: 0.5rem;
+    border-style: none;
+    padding-left: 0.5rem;
+    background-color: #999;
+}
 .btnUpdateDataProfile {
     border: none;
     border-radius: 0.5em;
     width: 8rem;
-    padding: 15px 0;
+    padding: 1rem 0;
     color: #fff;
     letter-spacing: 1px;
     background: #191a19;
     cursor: pointer;
+  }
+  .title-item-profile{
+      font-size: 16px;
+      color: #fff;
+  }
+  .msg-verification{
+      margin:auto;
   }

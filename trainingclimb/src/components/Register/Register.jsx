@@ -2,6 +2,7 @@ import React from "react";
 import firebs from '../../services/firebs';
 import { Login2 } from "../Login/Login2";
 import "../Login/Login.css"
+const imgProfileDefault = "https://firebasestorage.googleapis.com/v0/b/trainingclimb-dcb7a.appspot.com/o/profiles%2FprofileDefault.svg?alt=media&token=30681895-b0ea-41cc-b4f5-431c18678e61";
 class LoginView extends React.Component{
     render(){
       return (
@@ -28,8 +29,8 @@ export class Register extends React.Component
         this.inputFile = React.createRef();  
     }
     clearErrors = () =>{ 
-        this.setEmailError();
-        this.setPasswordError('');
+        this.setEmailError('');
+        this.setConfirmPasswordError('');
     }
     //Inputs email , username, password and confirm password
     setEmail = (email) => {this.setState({email:email})}
@@ -43,6 +44,16 @@ export class Register extends React.Component
     setUserError = (userError) => {this.setState({userError:userError})}
     setPasswordError = (passwordError) => {this.setState({passwordError:passwordError})}
     setConfirmPasswordError = (confirmPasswordError) => {this.setState({confirmPasswordError:confirmPasswordError})}
+    setNoMatchPassword = (matchpassword) => {this.setState({matchpassword:matchpassword})}
+    passwordMatch(){
+        if(this.state.password != this.state.confirmpassword){
+            this.setConfirmPasswordError("Password doesn't match!");
+            return false;
+        }else{
+            this.setConfirmPasswordError("");
+            return true;
+        }
+    }
     //Function about picture profile
     changeProfile = (image) => {
         this.setState({
@@ -66,32 +77,44 @@ export class Register extends React.Component
     //Function button Sign up
     handleSignUp() {
         this.clearErrors();
-        firebs.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
-            .then((userCredential)=>{
-                let userUID = userCredential.user.uid
-                let imageProfile  = this.state.imageuser[0];
-                let storageRef = firebs.storage().ref(`profiles/${imageProfile.name}`);
-                //Add profile picture on storage
-                let uploadTask = storageRef.put(imageProfile);
-                uploadTask.on('state_changed',
-                null,
-                null,
-                () =>{
-                    //Get url firestorage to add database training climb
-                        firebs.storage().ref('profiles').child(imageProfile.name).getDownloadURL().then((url) => {
-                            //Add data on database training climb
-                            firebs.database().ref('Users').child(userUID).set({
-                                email: this.state.email,  
-                                username: this.state.username,
-                                imageuser: url
-                            });
-                        })
-                    this.setAccountCreated(!this.state.accountNoCreated)
-                })
-
-                
+        if(this.passwordMatch()){
+            console.log(this.state.email+this.state.password)
+            firebs.auth().createUserWithEmailAndPassword(this.state.email,this.state.password).then(
+                (userCredential) =>{
+                    let userUID = userCredential.user.uid
+                    let imageProfile  ="";
+                    if(this.state.imageuser==null){
+                        imageProfile = imgProfileDefault;
+                        firebs.database().ref('Users').child(userUID).set({
+                            email: this.state.email,  
+                            username: this.state.username,
+                            imageuser: imageProfile
+                    });
+                    }else{
+                        imageProfile  = this.state.imageuser[0];
+                        let storageRef = firebs.storage().ref(`profiles/${imageProfile.name}`);
+                        //Add profile picture on storage
+                        let uploadTask = storageRef.put(imageProfile);
+                        uploadTask.on('state_changed',
+                            null,
+                            null,
+                            () =>{
+                                //Get url firestorage to add database training climb
+                                firebs.storage().ref('profiles').child(imageProfile.name).getDownloadURL().then((url) => {
+                                    //Add data on database training climb
+                                    firebs.database().ref('Users').child(userUID).set({
+                                            email: this.state.email,  
+                                            username: this.state.username,
+                                            imageuser: url
+                                    });
+                                })
+                            }
+                        )
+                    }
+                    this.setAccountCreated(!this.state.accountNoCreated);
             })
             .catch(err => {
+                console.log(err)
                 switch(err.code){
                     case "auth/email-already-in-use":
                     case "auth/invalid-email":
@@ -101,7 +124,8 @@ export class Register extends React.Component
                         this.setPasswordError(err.message);
                         break;
                 }
-            })
+            })            
+        }
     }
     render(){
         return(
@@ -116,7 +140,7 @@ export class Register extends React.Component
                                 <img className="logo"/>
                                 <label>Climb</label>
                             </div>
-                            <div className = "btncontainer">
+                            <div className = "logcontainer">
                                 <label>Attach Picture</label>
                                 <img id="img-signup-profile" className="profile" onClick={() => this.inputFile.current.click()}/>
                                 <input style={{ display: "none" }} ref={this.inputFile} onChange={(e) => this.changeProfile(e.target.files)} type="file"/>
@@ -133,9 +157,9 @@ export class Register extends React.Component
                                 <input type="password" autoFocus required value={this.state.confirmpassword} onChange={(e) => this.setConfirmPassword(e.target.value)}/>
                                 <p className="errorMessage">{this.state.confirmPasswordError}</p>
                                 <button className ="btnlogreg" onClick={()=>this.handleSignUp()}>Sign up</button>
-                                <p>Have an account? 
-                                    <span onClick={() => this.setAccountCreated(!this.state.accountNoCreated)}> Sign in</span>
-                                </p>
+                                <div className="container-pass-reg">
+                                    <p className="question-account">Have an account? <span className ="account-created" onClick={() => this.setAccountCreated(!this.state.accountNoCreated)}> Sign in</span></p>
+                                </div>
                             </div>
                         </div>
                     </section>

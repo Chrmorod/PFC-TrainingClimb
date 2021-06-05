@@ -4,7 +4,7 @@ export function Card({id,imageURL, dateadd, type, level, location, published,pro
     return(
             <div key={id} className="card-container">
                 <img className="image-lead-bould" src={imageURL}/>  
-                <div className="content">
+                <div>
                     <p className="dateadd">{dateadd}</p>
                     <p className="item-card-content">Lvl: {level}</p>
                     <p className="item-card-content">Type: {type}</p>

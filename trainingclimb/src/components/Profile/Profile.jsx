@@ -1,5 +1,6 @@
 import React from 'react';
 import firebs from '../../services/firebs';
+import Swal from 'sweetalert2'
 import "../Profile/Profile.css"
 export class Profile extends React.Component
 {
@@ -54,9 +55,26 @@ export class Profile extends React.Component
         })
     }
     handleUpdateProfile(){
-        console.log(this.state.confirmPassword);
-        let user = firebs.auth().currentUser;
-        user.updatePassword(this.state.confirmPassword);
+
+        if(this.state.newPassword === this.state.confirmPassword){
+            let user = firebs.auth().currentUser;
+            user.updatePassword(this.state.confirmPassword);
+            Swal.fire({
+                icon: 'success',
+                title: 'Your password has been updated',
+                showConfirmButton: true,
+            })
+            firebs.auth().signOut();
+            firebs.database().ref().off();
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "Password doesn't match!",
+            })
+        }
+
+
     }
     handleGetImageProfile(){
         let user = firebs.auth().currentUser;
@@ -75,22 +93,21 @@ export class Profile extends React.Component
             <>
             <div className="container-header-profile">
                 <div className="header-item-profile">
-                    <p>Picture</p>
+                    <p className="title-item-profile">Picture</p>
                     <img className="picture-profile" src={this.state.photoURL}/>
                 </div>
                 <div className="header-item-profile">
-                    <p>Personal Data</p>
+                    <p className="title-item-profile">Personal Data</p>
                     <div className="profile-input">
-                        <input className="input-text" placeholder={this.state.email} readOnly></input>
-                        <input className="input-text" placeholder={this.state.username} readOnly></input>
+                        <input className="input-text-lock" placeholder={this.state.email} readOnly></input>
+                        <input className="input-text-lock" placeholder={this.state.username} readOnly></input>
                     </div>
-
                 </div>
                 <div className="header-item-profile">
-                    <p>Security</p>
+                    <p className="title-item-profile">Security</p>
                     <div className="profile-input">
                         <input className="input-text" type="password" placeholder="Current Password" value={this.state.currentPassword} onChange={(e) =>this.handlePasswordVerify(e.target.value)}></input>
-                        <p>{this.state.msgVerificationError}</p>
+                        <p className="msg-verification">{this.state.msgVerificationError}</p>
                         <input className="input-text" type="password" placeholder="New Password" value={this.state.newPassword} onChange={(e) =>this.handleNewPassword(e.target.value)}></input>
                         <input className="input-text" type="password" placeholder="Confirm Password" value={this.state.confirmPassword} onChange={(e) =>this.handleConfirmPassword(e.target.value)}></input>
                         <p>{this.state.msgPasswordMatch}</p>

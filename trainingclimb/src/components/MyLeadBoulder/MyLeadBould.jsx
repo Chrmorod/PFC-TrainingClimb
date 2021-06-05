@@ -18,13 +18,15 @@ export class MyLeadBould extends React.Component
             username:this.props.username,
             userUID : this.props.userUID,
             imageuser: this.props.imageuser,
-            clickModificate:false
+            clickModificate:false,
+            nodata:true
         }
     }
-    componentDidMount(){
+    async componentDidMount(){
             const dbRef = firebs.database().ref().child('MyLeadsBoulders').child(this.props.userUID);
-            dbRef.on('value', snapshot => { 
+            await dbRef.on('value', snapshot => { 
                 if(snapshot.val()!==null){
+                    this.setState({nodata:false});
                     this.setState({...this.state.myLeadsBoulders, myLeadsBoulders:snapshot.val()});
                 }else{
                     this.setState({myLeadsBoulders:[]})
@@ -65,26 +67,30 @@ export class MyLeadBould extends React.Component
                             onClick={this.handleaddLeadBoulder}
                             />
                         </div>
-                        <div className="band">
-                            {Object.keys(this.state.myLeadsBoulders).map( i => {
-                                    return(
-                                        <div className="card-added" onClick={() => this.handleModification(i)}>
-                                            <Card
-                                            className="card-item"
-                                            id={i}
-                                            imageURL={this.state.myLeadsBoulders[i].imagelb}
-                                            dateadd={this.state.myLeadsBoulders[i].dateadd}
-                                            level={this.state.myLeadsBoulders[i].level}
-                                            type={this.state.myLeadsBoulders[i].type}
-                                            location={this.state.myLeadsBoulders[i].location}
-                                            published={this.state.myLeadsBoulders[i].published}
-                                            profile={this.state.myLeadsBoulders[i].profile}
-                                            iconapp={logoAPP}
-                                            />
-                                        </div>
-                                    )
-                            })}
-                        </div>
+                        {this.state.nodata ? (
+                                <p className="noDataMylb">No data added</p>
+                            ):(
+                                <div className="band">
+                                {Object.keys(this.state.myLeadsBoulders).map( i => {
+                                        return(
+                                            <div className="card-added" onClick={() => this.handleModification(i)}>
+                                                <Card
+                                                className="card-item"
+                                                id={i}
+                                                imageURL={this.state.myLeadsBoulders[i].imagelb}
+                                                dateadd={this.state.myLeadsBoulders[i].dateadd}
+                                                level={this.state.myLeadsBoulders[i].level}
+                                                type={this.state.myLeadsBoulders[i].type}
+                                                location={this.state.myLeadsBoulders[i].location}
+                                                published={this.state.myLeadsBoulders[i].published}
+                                                profile={this.state.myLeadsBoulders[i].profile}
+                                                iconapp={logoAPP}
+                                                />
+                                            </div>
+                                        )
+                                })}
+                            </div>
+                        )}
                     </>
                 ):(
                     <AddLeadBoulder

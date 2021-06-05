@@ -74,23 +74,29 @@ export class Details extends React.Component
                         <NewLeadBould/>
                 ):(
                     <div>
-                            <div className="cancel-container-details">
-                                <div className="btn-cancel-details" onClick={this.handleCancel}>X</div>
+                            <div className="cancel-container-details" onClick={this.handleCancel}>
+                                <div className="btn-cancel-details">X</div>
                             </div>
                             <div className="img-lead-bould-container">             
                                 <img className="img-lead-bould" id="new-img"/>
                             </div>
                             <div className="typecontainer-detail">
                                 <p className="title-details">Type:</p>
-                                <p className="content-details">{this.state.selectedType}</p>
+                            </div>
+                            <div className="typecontainer-detail">
+                                <textarea readOnly value={this.state.selectedType}/>
                             </div>
                             <div className="levelcontainer-detail">
                                 <p className="title-details">Lvl:</p>
-                                <p className="content-details">{this.state.selectedLevel}</p>
+                            </div>
+                            <div className="levelcontainer-detail">
+                                <textarea readOnly value={this.state.selectedLevel}/>
                             </div>
                             <div className="locationcontainer-detail">
                                 <p className="title-details">Location:</p>
-                                <p className="content-details">{this.state.location}</p>
+                            </div>
+                            <div className="locationcontainer-detail">
+                                <textarea readOnly value={this.state.location}/>
                             </div>
                             <div className="indicationscontainter-details">
                                 <p className="title-details">Indications:</p>
