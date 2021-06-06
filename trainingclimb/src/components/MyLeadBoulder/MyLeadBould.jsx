@@ -73,9 +73,10 @@ export class MyLeadBould extends React.Component
                                 <div className="band">
                                 {Object.keys(this.state.myLeadsBoulders).sort((a,b)=> this.state.myLeadsBoulders[a].dateadd < this.state.myLeadsBoulders[b].dateadd ? 1:-1).map( i => {
                                         return(
-                                            <div className="card-added" onClick={() => this.handleModification(i)}>
+                                            <div key={i} className="card-added" onClick={() => this.handleModification(i)}>
                                                 <Card
                                                 className="card-item"
+                                                key={i}
                                                 id={i}
                                                 imageURL={this.state.myLeadsBoulders[i].imagelb}
                                                 dateadd={this.state.myLeadsBoulders[i].dateadd}
