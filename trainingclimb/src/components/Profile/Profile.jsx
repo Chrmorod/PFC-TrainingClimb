@@ -91,30 +91,32 @@ export class Profile extends React.Component
     render(){
         return(
             <>
-            <div className="container-header-profile">
-                <div className="header-item-profile">
-                    <p className="title-item-profile">Picture</p>
-                    <img className="picture-profile" src={this.state.photoURL}/>
-                </div>
-                <div className="header-item-profile">
-                    <p className="title-item-profile">Personal Data</p>
-                    <div className="profile-input">
-                        <input className="input-text-lock" placeholder={this.state.email} readOnly></input>
-                        <input className="input-text-lock" placeholder={this.state.username} readOnly></input>
+            <div className="container-profile-father">
+                <div className="container-header-profile">
+                    <div className="header-item-profile">
+                        <p className="title-item-profile">Picture</p>
+                        <img className="picture-profile" src={this.state.photoURL}/>
+                    </div>
+                    <div className="header-item-profile">
+                        <p className="title-item-profile">Personal Data</p>
+                        <div className="profile-input">
+                            <input className="input-text-lock" placeholder={this.state.email} readOnly></input>
+                            <input className="input-text-lock" placeholder={this.state.username} readOnly></input>
+                        </div>
+                    </div>
+                    <div className="header-item-profile">
+                        <p className="title-item-profile">Security</p>
+                        <div className="profile-input">
+                            <input className="input-text" type="password" placeholder="Current Password" value={this.state.currentPassword} onChange={(e) =>this.handlePasswordVerify(e.target.value)}></input>
+                            <p className="msg-verification">{this.state.msgVerificationError}</p>
+                            <input className="input-text" type="password" placeholder="New Password" value={this.state.newPassword} onChange={(e) =>this.handleNewPassword(e.target.value)}></input>
+                            <input className="input-text" type="password" placeholder="Confirm Password" value={this.state.confirmPassword} onChange={(e) =>this.handleConfirmPassword(e.target.value)}></input>
+                            <p>{this.state.msgPasswordMatch}</p>
+                        </div>
                     </div>
                 </div>
-                <div className="header-item-profile">
-                    <p className="title-item-profile">Security</p>
-                    <div className="profile-input">
-                        <input className="input-text" type="password" placeholder="Current Password" value={this.state.currentPassword} onChange={(e) =>this.handlePasswordVerify(e.target.value)}></input>
-                        <p className="msg-verification">{this.state.msgVerificationError}</p>
-                        <input className="input-text" type="password" placeholder="New Password" value={this.state.newPassword} onChange={(e) =>this.handleNewPassword(e.target.value)}></input>
-                        <input className="input-text" type="password" placeholder="Confirm Password" value={this.state.confirmPassword} onChange={(e) =>this.handleConfirmPassword(e.target.value)}></input>
-                        <p>{this.state.msgPasswordMatch}</p>
-                    </div>
-                </div> 
             </div>
-            <div className="container-btn-update"><button className="btnUpdateDataProfile" onClick={()=>this.handleUpdateProfile()}>Update</button></div>
+            <div className="container-btn-update"><button className="btnUpdateDataProfile" onClick={()=>this.handleUpdateProfile()}>Update</button></div> 
             </>
         )
     }

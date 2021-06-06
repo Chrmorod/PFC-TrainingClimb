@@ -1,7 +1,15 @@
 {
   "name": "trainingclimb",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "trainingclimb is an aplication to share leads or boulders for the continuous training of climbers",
+  "repository": {
+    "type": "git",
+    "url" : "git+https://github.com/Chrmorod/PFC-TrainingClimb.git"
+  },
+  "author": {
+    "name": "Christian Molina Rodríguez"
+  },
+  "license": "ISC",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
