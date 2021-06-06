@@ -39,6 +39,7 @@ export class ModLeadBoulder extends React.Component
             const preview = document.getElementById('new-img');
             preview.src=snapshot.val().imagelb;
             this.setState({
+                imagelb: snapshot.val().imagelb,
                 selectedLevel: snapshot.val().level,
                 selectedType: snapshot.val().type,
                 location: snapshot.val().location,
@@ -90,33 +91,73 @@ export class ModLeadBoulder extends React.Component
         }
     }
     handleFileUpload(){
-            let file  = this.state.files[0];
-            let storageRef = firebs.storage().ref(`myleadbould/${file.name}`);
-            let uploadTask = storageRef.put(file);
-            uploadTask.on('state_changed',
-                (snapshot) =>{
-                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    if(progress==100){
+            if(this.state.files == null){
+                //My leads and bouldering part
+                firebs.database().ref('MyLeadsBoulders/'+this.props.userUID+'/'+this.props.id).update({
+                    imagelb: this.state.imagelb
+                    ,profile: this.props.imageuser
+                    ,level: this.state.selectedLevel
+                    ,location: this.state.location
+                    ,published: this.props.username
+                    ,type: this.state.selectedType
+                    ,indications:this.state.indications
+                    ,dateadd: moment().format("DD/MM/YYYY")
+                });
+                //New leads and bouldering part
+                firebs.database().ref('LeadsBoulders/'+this.props.id+'/').update({
+                    imagelb: this.state.imagelb
+                    ,profile: this.props.imageuser
+                    ,level: this.state.selectedLevel
+                    ,location: this.state.location
+                    ,published: this.props.username
+                    ,type: this.state.selectedType
+                    ,indications:this.state.indications
+                    ,dateadd: moment().format("DD/MM/YYYY")
+                });
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Your Lead/Bouldering has been updated',
+                    showConfirmButton: true,
+                })    
+            }else{
+                let file  = this.state.files[0];
+                let storageRef = firebs.storage().ref(`myleadbould/${file.name}`);
+                let uploadTask = storageRef.put(file);
+                uploadTask.on('state_changed',
+                    (snapshot) =>{
+                        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        if(progress==100){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Your Lead/Bouldering has been updated',
+                                showConfirmButton: true,
+                            })
+                        }
+                    },
+                    () =>{
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Your Lead/Bouldering has been updated',
-                            showConfirmButton: true,
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
                         })
-                    }
-                },
-                () =>{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong!',
-                    })
-                },
-                () =>{
-                    storageRef.getDownloadURL().then((url) => {
-                        let downloadURL = url;
-                        //My leads and bouldering part
-                        firebs.database().ref('MyLeadsBoulders/'+this.props.userUID+'/'+this.props.id).update({
-                            imagelb: downloadURL
+                    },
+                    () =>{
+                        storageRef.getDownloadURL().then((url) => {
+                            let downloadURL = url;
+                            //My leads and bouldering part
+                            firebs.database().ref('MyLeadsBoulders/'+this.props.userUID+'/'+this.props.id).update({
+                                imagelb: downloadURL
+                                ,profile: this.props.imageuser
+                                ,level: this.state.selectedLevel
+                                ,location: this.state.location
+                                ,published: this.props.username
+                                ,type: this.state.selectedType
+                                ,indications:this.state.indications
+                                ,dateadd: moment().format("DD/MM/YYYY")
+                            });
+                            //New leads and bouldering part
+                            firebs.database().ref('LeadsBoulders/'+this.props.id+'/').update({
+                                imagelb: downloadURL
                             ,profile: this.props.imageuser
                             ,level: this.state.selectedLevel
                             ,location: this.state.location
@@ -124,21 +165,12 @@ export class ModLeadBoulder extends React.Component
                             ,type: this.state.selectedType
                             ,indications:this.state.indications
                             ,dateadd: moment().format("DD/MM/YYYY")
+                            });    
                         });
-                        //New leads and bouldering part
-                        firebs.database().ref('LeadsBoulders/'+this.props.id+'/').update({
-                            imagelb: downloadURL
-                        ,profile: this.props.imageuser
-                        ,level: this.state.selectedLevel
-                        ,location: this.state.location
-                        ,published: this.props.username
-                        ,type: this.state.selectedType
-                        ,indications:this.state.indications
-                        ,dateadd: moment().format("DD/MM/YYYY")
-                        });    
-                    });
-                }
-            );
+                    }
+                );
+            }
+
             this.handleCancel();
     }
     handleDeleteFile(){
