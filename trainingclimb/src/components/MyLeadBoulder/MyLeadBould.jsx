@@ -22,9 +22,9 @@ export class MyLeadBould extends React.Component
             nodata:true
         }
     }
-    async componentDidMount(){
+    componentDidMount(){
             const dbRef = firebs.database().ref().child('MyLeadsBoulders').child(this.props.userUID);
-            await dbRef.on('value', snapshot => { 
+            dbRef.on('value', snapshot => { 
                 if(snapshot.val()!==null){
                     this.setState({nodata:false});
                     this.setState({...this.state.myLeadsBoulders, myLeadsBoulders:snapshot.val()});
@@ -71,7 +71,7 @@ export class MyLeadBould extends React.Component
                                 <p className="noDataMylb">No data added</p>
                             ):(
                                 <div className="band">
-                                {Object.keys(this.state.myLeadsBoulders).map( i => {
+                                {Object.keys(this.state.myLeadsBoulders).sort((a,b)=> this.state.myLeadsBoulders[a].dateadd < this.state.myLeadsBoulders[b].dateadd ? 1:-1).map( i => {
                                         return(
                                             <div className="card-added" onClick={() => this.handleModification(i)}>
                                                 <Card

@@ -242,7 +242,7 @@ export class ModLeadBoulder extends React.Component
                                     Location:
                                 </label>
                                 <div>
-                                    <input value={this.state.location} type="text" name="Location" onChange={this.locationChange} />
+                                    <input className="input-location-add" value={this.state.location} type="text" name="Location" onChange={this.locationChange} />
                                 </div>
                             </div>
                             <div className="indicationscontainter">
