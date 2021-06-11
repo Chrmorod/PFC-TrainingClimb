@@ -103,7 +103,6 @@ export class Login2 extends React.Component
                 })
             }
         ).catch(err => {
-            console.log(err.code)
             switch(err.code){
                 case "auth/invalid-email":
                 case "auth/user-disabled":

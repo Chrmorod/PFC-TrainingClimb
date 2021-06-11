@@ -22,7 +22,6 @@ export class ForgotPassword extends React.Component
     }
     handleCancel(){
         this.setgo2Login(false);
-        console.log(this.state.forgotpassword);
     }
     sendEmail = () =>{
         firebs.auth().sendPasswordResetEmail(this.state.email);

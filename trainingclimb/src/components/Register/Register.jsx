@@ -2,6 +2,7 @@ import React from "react";
 import firebs from '../../services/firebs';
 import { Login2 } from "../Login/Login2";
 import "../Login/Login.css"
+import Swal from 'sweetalert2'
 const imgProfileDefault = "https://firebasestorage.googleapis.com/v0/b/trainingclimb-dcb7a.appspot.com/o/profiles%2FprofileDefault.svg?alt=media&token=30681895-b0ea-41cc-b4f5-431c18678e61";
 class LoginView extends React.Component{
     render(){
@@ -78,7 +79,6 @@ export class Register extends React.Component
     handleSignUp() {
         this.clearErrors();
         if(this.passwordMatch()){
-            console.log(this.state.email+this.state.password)
             firebs.auth().createUserWithEmailAndPassword(this.state.email,this.state.password).then(
                 (userCredential) =>{
                     let userUID = userCredential.user.uid
@@ -111,10 +111,14 @@ export class Register extends React.Component
                             }
                         )
                     }
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Your user has been registered',
+                        showConfirmButton: true,
+                    })
                     this.setAccountCreated(!this.state.accountNoCreated);
             })
             .catch(err => {
-                console.log(err)
                 switch(err.code){
                     case "auth/email-already-in-use":
                     case "auth/invalid-email":

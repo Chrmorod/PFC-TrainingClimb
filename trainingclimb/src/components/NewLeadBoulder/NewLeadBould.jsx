@@ -45,7 +45,6 @@ export class NewLeadBould extends React.Component
         leadBoulderRef.get().then((snapshot) => {
             if(snapshot.val() != null){
                 snapshot.forEach(snap =>{
-                    console.log(snap.val().type)
                     if(snap.val().type === "Lead"){
                         leadsBoulders.push(snap.val());
                         this.setState({nodata:false});
@@ -61,7 +60,6 @@ export class NewLeadBould extends React.Component
         leadBoulderRef.get().then((snapshot) => {
             if(snapshot.val() != null){
                 snapshot.forEach(snap =>{
-                    console.log(snap.val().type)
                     if(snap.val().type === "Boulder"){
                         leadsBoulders.push(snap.val());
                         this.setState({nodata:false});
@@ -74,7 +72,7 @@ export class NewLeadBould extends React.Component
     handleAll = () =>{
         let leadsBoulders = new Array();
         const leadBoulderRef = firebs.database().ref().child("LeadsBoulders");
-        leadBoulderRef.get().then((snapshot) => {
+        leadBoulderRef.on('value', (snapshot) => {
             if(snapshot.val() != null){
                 snapshot.forEach(snap =>{
                     leadsBoulders.push(snap.val());
