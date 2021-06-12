@@ -27,9 +27,13 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm i serve` ⚙️
+### `npm i serve` 📋
 
-Serve run the project packed by default in another port.
+Install serve to test the web in other port.
+
+### 'serve -s build` ⚙️
+
+Run the project packed by default in port 5000.
 Open [http://localhost:5000](http://localhost:5000) to view it in the browser.
 
 ## Build with 🛠️
