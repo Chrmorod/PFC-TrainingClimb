@@ -10,6 +10,10 @@ You will need to download the directory [Training Climb](https://github.com/Chrm
 
 ## Prerequisites/Installation 📋
 
+Attention if you don't want download complete project you can download all files and directories without node_modules directory then you must run the following command in the project directory:
+
+### `npm install`🔧
+
 In the project directory, you can run:
 
 ### `npm start` 🔧
