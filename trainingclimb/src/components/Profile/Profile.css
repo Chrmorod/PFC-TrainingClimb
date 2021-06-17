@@ -29,9 +29,10 @@
     border:none;
 }
 .picture-profile{
-    width: 100%;
+    width: 50%;
     height: auto;
     border-radius: 0.5%;
+    margin-left: 5rem;
 }
 .container-btn-update{
     display: block;
